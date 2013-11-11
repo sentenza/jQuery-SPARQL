@@ -1,25 +1,26 @@
-/**
-*
-* This class help to get content by using a SPARQL endpoint
-* This class use jQuery 1.7+
-*
-* @author Damien Legrand  < http://damienlegrand.com >
-*/
+/*
+ * Copyright (c) 2013 Damien Legrand, Alfredo Torre
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
+ * to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 
-function SPARQL()
-{
-	/**
-	*
-	* ATTRIBUTES
-	*
-	**/
-	
-	//The endpoint base URL without parameters
-	this.baseUrl 		= "http://dbpedia.org/sparql";
-	
-	//The result's type
-	this.format 		= "json";
-	
+function SPARQL() {
+    /**
+     * ATTRIBUTES
+     **/
+
+    //The endpoint base URL without parameters
+    this.baseUrl = "http://dbpedia.org/sparql";
+
+    //The result's type
+    this.format = "json";
+
 	//The GET or POST parameter name for the query
 	this.queryParam 	= "query";
 	
@@ -28,7 +29,7 @@ function SPARQL()
 	
 	//GET or POST
 	this.method 		= "GET";
-	this.values			= "";
+	this.values		= "";
 	
 	//If you need to atache some information (will be return to the callback)
 	this.info 			= null;
@@ -38,10 +39,10 @@ function SPARQL()
 	
 	//Arrays to build the request
 	this.prefixes 		= [];
-	this.distinctSelect = false;
+	this.distinctSelect 	= false;
 	this.variables 		= [];
 	this.wheres 		= [];
-	this.orders			= [];
+	this.orders		= [];
 	this.limitNb		= null;
 	this.offsetNb		= null;
 	this.unions 		= []; //array of SPARQL object
@@ -56,12 +57,12 @@ function SPARQL()
 	this.prefixe 		= function(ns, x) 	{ this.prefixes.push("PREFIX " + ns + ": <" + x + ">"); return this; };
 	this.distinct		= function(bool)	{ this.distinctSelect = bool; return this;}
 	this.variable 		= function(x) 		{ this.variables.push(x); return this; };
-	this.where 			= function(x, y, z) { this.wheres.push(x + " " + y + " " + z); return this; };
-	this.optionalWhere 	= function(x, y, z) { this.wheres.push("OPTIONAL {" + x + " " + y + " " + z + "}"); return this; };
-	this.union 			= function(x) 		{ this.unions.push(x); return this; };
+	this.where 		= function(x, y, z) 	{ this.wheres.push(x + " " + y + " " + z); return this; };
+	this.optionalWhere 	= function(x, y, z) 	{ this.wheres.push("OPTIONAL {" + x + " " + y + " " + z + "}"); return this; };
+	this.union 		= function(x) 		{ this.unions.push(x); return this; };
 	this.filter 		= function(x) 		{ this.wheres.push("FILTER ( " + x + " )"); return this; };
 	this.orderBy 		= function(x) 		{ this.variables.push(x); return this; };
-	this.limit 			= function(x) 		{ this.limitNb = x; return this; };
+	this.limit 		= function(x) 		{ this.limitNb = x; return this; };
 	this.offset 		= function(x) 		{ this.offestNb = x; return this; };
 	this.setInfo		= function(x) 		{ this.info = x; return this; };
 	
@@ -85,7 +86,7 @@ function SPARQL()
 			for(int = 0; i < this.variables.length; i++)
 			{
 				if(first) first = false;
-				else if(i < this.variables.length) sp += ", ";
+				else if(i < this.variables.length) sp += " ";
 				sp += this.variables[i];
 			}
 		}
@@ -172,6 +173,7 @@ function SPARQL()
 			url: this.baseUrl,
 			data: data,
 			dataType: this.format
+
 		}).done(function( data ) {
 			var ret = data;
 			if(generateDBPedia == true && cur.format == 'json')
@@ -184,6 +186,8 @@ function SPARQL()
 					for(var j = 0; j < data.head.vars.length; j++)
 					{
 						obj[data.head.vars[j]] = data.results.bindings[i][data.head.vars[j]]['value'];
+						// sentenza
+						console.dir(data.results.bindings[i]);
 					}
 					
 					ret.push(obj);
@@ -195,5 +199,6 @@ function SPARQL()
 			cur.sparql = "";
 		});
 	}
+
 	
 }

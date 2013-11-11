@@ -1,4 +1,4 @@
-# SPARQL - JS - JQUERY
+# jQuery SPARQL Library
 
 With this JavaScript class you can easily create sparql requests, and perform the request to an endpoint.
 
